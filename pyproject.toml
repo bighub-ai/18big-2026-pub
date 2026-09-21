@@ -1,0 +1,56 @@
+[project]
+name = "eshop-lakehouse"
+version = "0.1.0"
+description = "18BIG – Big Data Tools and Architecture: local lakehouse (teaching project)"
+requires-python = ">=3.12"
+
+# --- Core: every student needs this, installed by a single `uv sync` ---
+dependencies = [
+    # DataFrame + SQL engine + storage (backbone stack)
+    "polars>=1.0",
+    "duckdb>=1.0",
+    "pyarrow>=16",
+    "deltalake>=0.18",          # Delta Lake table format (delta-rs, no JVM)
+    # Data contracts / quality
+    "pandera[polars]>=0.20",
+    # Transformations
+    "dbt-core>=1.8",
+    "dbt-duckdb>=1.8",
+    # Tooling / DX
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "typer>=0.12",              # CLI (uv run eshop ...)
+    "rich>=13.7",
+    "faker>=25",               # synthetic data generator
+    "connectorx>=0.3",         # JDBC-like reads from a DB (session 02)
+]
+
+[project.scripts]
+eshop = "eshop.cli:app"
+
+# --- Optional groups: added gradually / only for a given exercise ---
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.5"]
+orchestration = ["dagster>=1.7", "dagster-webserver>=1.7", "dagster-dbt>=0.23"]
+ml = ["scikit-learn>=1.5", "mlflow>=2.14", "evidently>=0.4"]
+viz = ["streamlit>=1.36", "altair>=5.3"]
+
+# Opt-in labs (installed explicitly via `uv sync --group <name>`):
+serving = ["fastapi>=0.111", "uvicorn>=0.30", "diskcache>=5.6"]   # KV / ODS / API
+streaming = ["confluent-kafka>=2.4"]                              # Redpanda lab (with Docker)
+spark = ["pyspark>=3.5"]                                          # isolated Spark lab
+
+[tool.uv]
+# Installed by default on `uv sync` (course backbone). Heavy/opt-in labs are not.
+default-groups = ["dev", "orchestration", "ml", "viz"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/eshop"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

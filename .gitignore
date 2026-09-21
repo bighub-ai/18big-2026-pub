@@ -1,0 +1,35 @@
+# Python / uv
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Generated data and lakehouse (NOT committed – generated locally)
+data/raw/*
+data/lake/**/*
+data/quarantine/*
+!**/.gitkeep
+
+# dbt
+dbt/eshop_dbt/target/
+dbt/eshop_dbt/dbt_packages/
+dbt/eshop_dbt/logs/
+*.duckdb
+*.duckdb.wal
+
+# MLflow / ML artifacts
+mlruns/
+mlartifacts/
+
+# Dagster
+dagster_home/
+tmp*/
+
+# Student working directory (generated from scaffolds)
+student/
+
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
