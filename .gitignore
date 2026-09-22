@@ -5,10 +5,9 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
-# Generated data and lakehouse (NOT committed – generated locally)
-data/raw/*
-data/lake/**/*
-data/quarantine/*
+# Local lakehouse & all generated artifacts under data/ — keep only the folder skeleton (.gitkeep)
+data/**
+!data/**/
 !**/.gitkeep
 
 # dbt
@@ -21,6 +20,7 @@ dbt/eshop_dbt/logs/
 # MLflow / ML artifacts
 mlruns/
 mlartifacts/
+mlflow.db
 
 # Dagster
 dagster_home/
@@ -28,6 +28,16 @@ tmp*/
 
 # Student working directory (generated from scaffolds)
 student/
+
+# Built lecture exports (regenerated via `just lecture NN`; published to students on demand)
+lectures/pdf/
+lectures/html/
+
+# Generated Pattern-B scaffold previews (mirrors of src/dbt/... under a session's exercise/)
+sessions/*/exercise/src/
+sessions/*/exercise/dbt/
+sessions/*/exercise/dagster_project/
+sessions/*/exercise/app/
 
 # OS / IDE
 .DS_Store

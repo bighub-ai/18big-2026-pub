@@ -1,0 +1,12 @@
+version: 2
+
+# The Silver Delta tables, loaded into DuckDB (schema `silver`) by `eshop dbt-build`.
+sources:
+  - name: silver
+    schema: silver
+    tables:
+      - name: customers
+      - name: orders
+      - name: order_items
+      - name: payments
+      - name: products

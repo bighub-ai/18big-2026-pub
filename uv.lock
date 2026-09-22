@@ -1197,6 +1197,7 @@ dependencies = [
     { name = "dbt-core" },
     { name = "dbt-duckdb" },
     { name = "deltalake" },
+    { name = "diskcache" },
     { name = "duckdb" },
     { name = "faker" },
     { name = "pandera", extra = ["polars"] },
@@ -1204,6 +1205,7 @@ dependencies = [
     { name = "pyarrow" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "pyyaml" },
     { name = "rich" },
     { name = "typer" },
 ]
@@ -1224,7 +1226,6 @@ orchestration = [
     { name = "dagster-webserver" },
 ]
 serving = [
-    { name = "diskcache" },
     { name = "fastapi" },
     { name = "uvicorn" },
 ]
@@ -1245,6 +1246,7 @@ requires-dist = [
     { name = "dbt-core", specifier = ">=1.8" },
     { name = "dbt-duckdb", specifier = ">=1.8" },
     { name = "deltalake", specifier = ">=0.18" },
+    { name = "diskcache", specifier = ">=5.6" },
     { name = "duckdb", specifier = ">=1.0" },
     { name = "faker", specifier = ">=25" },
     { name = "pandera", extras = ["polars"], specifier = ">=0.20" },
@@ -1252,6 +1254,7 @@ requires-dist = [
     { name = "pyarrow", specifier = ">=16" },
     { name = "pydantic", specifier = ">=2.7" },
     { name = "pydantic-settings", specifier = ">=2.3" },
+    { name = "pyyaml", specifier = ">=6" },
     { name = "rich", specifier = ">=13.7" },
     { name = "typer", specifier = ">=0.12" },
 ]
@@ -1272,7 +1275,6 @@ orchestration = [
     { name = "dagster-webserver", specifier = ">=1.7" },
 ]
 serving = [
-    { name = "diskcache", specifier = ">=5.6" },
     { name = "fastapi", specifier = ">=0.111" },
     { name = "uvicorn", specifier = ">=0.30" },
 ]

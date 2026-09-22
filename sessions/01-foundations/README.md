@@ -37,7 +37,10 @@ Then fill in the `# TODO`s in `sessions/01-foundations/exercise/explore.py`:
 1. How many customers and products do we have? (SQL over CSV)
 2. Daily revenue (SQL over the `orders` + `order_items` tables in SQLite).
 3. Top 5 products by revenue.
-4. Save daily revenue to Parquet (`data/raw/daily_revenue.parquet`).
+4. Orders per status (`GROUP BY status`).
+5. Average order value (a CTE with per-order totals, then average them).
+6. Save daily revenue to Parquet (`data/raw/daily_revenue.parquet`).
+7. **(harder)** Month-over-month revenue growth using the window function `lag()`.
 
 Run:
 
