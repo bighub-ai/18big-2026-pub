@@ -8,7 +8,7 @@ requires-python = ">=3.12"
 dependencies = [
     # DataFrame + SQL engine + storage (backbone stack)
     "polars>=1.0",
-    "duckdb>=1.0",
+    "duckdb>=1.2",              # >=1.2 needed for the `ducklake` extension (session 04 bonus)
     "pyarrow>=16",
     "deltalake>=0.18",          # Delta Lake table format (delta-rs, no JVM)
     # Data contracts / quality
@@ -25,6 +25,7 @@ dependencies = [
     "connectorx>=0.3",         # JDBC-like reads from a DB (session 02)
     "pyyaml>=6",               # YAML data contracts (session 08)
     "diskcache>=5.6",          # local key-value store (session 12, Redis/Valkey stand-in)
+    "marimo>=0.9",             # reactive Python/SQL notebooks (session 01 SQL intro, later demos)
 ]
 
 [project.scripts]

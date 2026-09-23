@@ -3,6 +3,7 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+__marimo__/
 .ruff_cache/
 
 # Local lakehouse & generated artifacts (keep only the folder skeleton)

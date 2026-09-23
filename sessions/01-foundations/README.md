@@ -32,7 +32,21 @@ uv run eshop datagen    # generates source data into data/raw/
 uv run eshop doctor     # verifies the environment
 ```
 
-Then fill in the `# TODO`s in `sessions/01-foundations/exercise/explore.py`:
+### SQL basics, live (marimo notebook)
+
+Before the fill-in exercise, walk through six core SQL building blocks — **SELECT/FROM, WHERE,
+JOIN, aggregation + GROUP BY, window functions (LAG/LEAD), CTE** — each as task → query → result,
+running live against the raw e-shop sources:
+
+```bash
+just notebook sessions/01-foundations/exercise/sql_basics_notebook.py
+# (equivalent) uv run marimo edit sessions/01-foundations/exercise/sql_basics_notebook.py
+```
+
+It opens in the browser; edit any query and re-run its cell to experiment. This is a worked
+walkthrough, not a fill-in exercise — the exercise below reuses the same six ideas on new questions.
+
+### Exercise: fill in the `# TODO`s in `sessions/01-foundations/exercise/explore.py`
 
 1. How many customers and products do we have? (SQL over CSV)
 2. Daily revenue (SQL over the `orders` + `order_items` tables in SQLite).
@@ -56,7 +70,10 @@ uv run python sessions/01-foundations/exercise/explore.py
 
 ## Common mistakes / notes for the instructor
 
-- Students without `uv` – point them to installation ahead of time (in the invite to the first class).
+- Students without `uv` – point them to installation ahead of time (in the invite to the first
+  class); see the "Prerequisites" section in the repo README (just `uv` is required, nothing else).
+- `just notebook ...` opens marimo in a new browser tab – if it opens blank, refresh once (the
+  server needs a moment to start on the first run).
 - DuckDB reads CSV via `read_csv_auto('...')` and SQLite via `sqlite_scan('db','table')` –
   show that **no server is needed**.
 - Emphasize that the data is intentionally "dirty" (we'll see in session 5) – ignore it for now.

@@ -6,6 +6,8 @@ For now it provides `datagen` (session 1) and `doctor` (environment check).
 
 from __future__ import annotations
 
+from pathlib import Path
+
 import duckdb
 import typer
 from rich.console import Console
@@ -16,6 +18,20 @@ from eshop.datagen import generate_all
 
 app = typer.Typer(help="18BIG – E-shop Lakehouse CLI", no_args_is_help=True)
 console = Console()
+
+
+@app.command()
+def sql(file: Path) -> None:
+    """Run a plain .sql file (e.g. a session exercise) through DuckDB and print each result.
+
+    Exists so .sql exercises don't require a separate `duckdb` CLI install – only the
+    `duckdb` Python package that `uv sync` already installs.
+    """
+    con = duckdb.connect()
+    for statement in duckdb.extract_statements(file.read_text()):
+        result = con.sql(statement.query)
+        if result is not None:
+            console.print(result)
 
 
 @app.command()
@@ -187,6 +203,21 @@ def delta_demo() -> None:
     console.print(f"  v1 rows (upserted): {r['v1_rows']:,}  (+1 new customer)")
     console.print(f"  delta history:      {r['history_len']} versions")
     console.print(f"  time travel works:  v0 preserved, latest has updated email = {r['updated_email_present']}")
+    console.print("[green]Done.[/]")
+
+
+@app.command()
+def ducklake_demo() -> None:
+    """Same demo as delta-demo, but via DuckLake with a SQLite-backed catalog (session 4, bonus)."""
+    from eshop.silver.ducklake_io import demo_ducklake
+
+    console.print("[bold]DuckLake demo: Silver customers (catalog = SQLite)[/]")
+    r = demo_ducklake()
+    console.print(f"  v0 rows:            {r['v0_rows']:,}")
+    console.print(f"  v1 rows (updated):  {r['v1_rows']:,}  (+1 new customer)")
+    console.print(f"  snapshots:          {r['n_snapshots']}")
+    console.print(f"  time travel works:  v0 preserved = {r['v0_email_unchanged']}, "
+                  f"latest has updated email = {r['updated_email_present']}")
     console.print("[green]Done.[/]")
 
 
