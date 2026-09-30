@@ -27,7 +27,8 @@ You fill in the `# TODO`s in `src/eshop/ingestion/bronze.py`:
    (the `_row_hash` audit column is already there).
 2. `ingest_sqlite` – read the whole table from SQLite via DuckDB's `sqlite_scan` (full load).
 3. **`ingest_incremental` – the watermark:** take the highest `order_id` already in Bronze and
-   read only newer rows from SQLite (first run: no Bronze yet → read everything).
+   read only newer rows from SQLite, this time via DuckDB's `ATTACH ... (TYPE sqlite)`
+   (first run: no Bronze yet → read everything).
 4. **`ingest_incremental` – the append:** add the new rows to what Bronze already has. Re-running
    with no new data must land **zero** rows. Bronze doesn't compare or deduplicate – that's Silver.
 5. **(metadata-driven)** Read `src/eshop/ingestion/sources.yml` and `ingest_source`. Switch

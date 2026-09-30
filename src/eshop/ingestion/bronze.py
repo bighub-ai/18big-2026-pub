@@ -87,7 +87,7 @@ def ingest_incremental(table: str = "orders", key: str = "order_id", batch_id: s
 
     con = duckdb.connect()
     # Watermark = max(key) already landed; nothing landed yet → read the whole table.
-    # TODO(2): compute the watermark from `existing` and read only rows with key > watermark
+    # TODO(2): compute the watermark from `existing`, ATTACH the SQLite file, read only rows with key > watermark
     incoming = _add_ingestion_metadata(incoming, f"{settings.source_db.name}:{table}", batch_id)
     # Append: keep what Bronze already has and add the new rows below it (no comparing, no dedup).
     # TODO(2): write `incoming` to Bronze – alone on the first run, else appended to `existing`
