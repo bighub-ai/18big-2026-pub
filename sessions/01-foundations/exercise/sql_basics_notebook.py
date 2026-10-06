@@ -126,8 +126,7 @@ def _(con, customers, mo, orders):
         f"""
         SELECT o.order_id, c.name AS customer, o.status
         FROM orders o
-        JOIN customers c 
-            ON o.customer_id = c.customer_id
+        JOIN customers c ON o.customer_id = c.customer_id
         ORDER BY o.order_id
         LIMIT 10
         """,
