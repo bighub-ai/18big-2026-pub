@@ -1,7 +1,7 @@
 """Session 3 – columnar storage and partitioning lab.
 
 Fill in each TODO, then run and compare the numbers.
-Run with:  uv run python sessions/03-parquet-medallion/exercise/partition_lab.py
+Run with:  uv run python sessions/03-storage-formats/exercise/partition_lab.py
 
 Reminders:
   - Polars partitioned write:  df.write_parquet(dir, partition_by=["col", ...])

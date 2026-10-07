@@ -1,4 +1,4 @@
-# Session 3 — Parquet and the medallion architecture
+# Session 3 — Storage formats for the lakehouse
 
 **Syllabus:** topic 3 · **Layer:** Bronze/Silver (storage)
 
@@ -20,7 +20,7 @@ and predicate pushdown. They understand the purpose of the medallion layers.
 ## Practice (~45 min)
 
 A measurement lab. You fill in the `# TODO`s in
-`sessions/03-parquet-medallion/exercise/partition_lab.py`:
+`sessions/03-storage-formats/exercise/partition_lab.py`:
 
 1. Write Bronze orders as a **Hive-partitioned** dataset (one folder per `order_date`).
 2. Pick a day to filter on.
@@ -32,7 +32,7 @@ Then run and compare the timings (full scan vs. partition-pruned):
 
 ```bash
 uv run eshop datagen && uv run eshop ingest   # if you don't have Bronze yet
-uv run python sessions/03-parquet-medallion/exercise/partition_lab.py
+uv run python sessions/03-storage-formats/exercise/partition_lab.py
 ```
 
 ## Deliverable / checkpoint
