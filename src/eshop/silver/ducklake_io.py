@@ -23,7 +23,7 @@ def ducklake_connect(catalog_path: Path, data_path: Path) -> duckdb.DuckDBPyConn
     con.execute("INSTALL ducklake")
     con.execute("INSTALL sqlite")
     # A DuckLake catalog is just rows in a SQL database (here SQLite) + Parquet files under DATA_PATH.
-    # TODO(4): ATTACH a DuckLake catalog backed by SQLite at `catalog_path`, storing data files under `data_path`
+    con.execute(f"ATTACH 'ducklake:sqlite:{catalog_path}' AS lake (DATA_PATH '{data_path}')")
     con.execute("USE lake")
     return con
 
@@ -59,7 +59,7 @@ def demo_ducklake() -> dict:
     v1_rows = con.execute("SELECT count(*) FROM customers").fetchone()[0]
 
     # Time travel: read the table as it was right after the initial load, before the update/insert.
-    # TODO(4): read `customers` as of `v0_snapshot`, using DuckLake's AT (VERSION => ...) syntax
+    v0 = con.execute(f"SELECT * FROM customers AT (VERSION => {v0_snapshot})").pl()
 
     n_snapshots = con.execute("SELECT count(*) FROM ducklake_snapshots('lake')").fetchone()[0]
     updated_email_present = (

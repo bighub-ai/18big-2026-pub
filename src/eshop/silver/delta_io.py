@@ -19,21 +19,32 @@ from eshop.config import settings
 def write_delta(path: Path, df: pl.DataFrame, mode: str = "overwrite") -> None:
     """Write a Polars frame as a Delta table (mode: 'overwrite' or 'append')."""
     # write_deltalake takes an Arrow table; df.to_arrow() converts a Polars frame.
-    # TODO(4): write df to the Delta table at `path` using the given mode
+    write_deltalake(str(path), df.to_arrow(), mode=mode)
 
 
 def upsert_delta(path: Path, df: pl.DataFrame, key: str) -> None:
     """MERGE df into an existing Delta table on `key`: update matches, insert new rows."""
     dt = DeltaTable(str(path))
     # A MERGE matches source (s) to target (t) on the key, then updates matches and inserts the rest.
-    # TODO(4): MERGE df into dt on t.<key> = s.<key>; when matched update all, else insert all
+    (
+        dt.merge(
+            source=df.to_arrow(),
+            predicate=f"t.{key} = s.{key}",
+            source_alias="s",
+            target_alias="t",
+        )
+        .when_matched_update_all()
+        .when_not_matched_insert_all()
+        .execute()
+    )
 
 
 def read_delta(path: Path, version: int | None = None) -> pl.DataFrame:
     """Read a Delta table; if `version` is given, time-travel to that historical version."""
     dt = DeltaTable(str(path))
     # Time travel: load an older snapshot of the table by its version number.
-    # TODO(4): when version is not None, load that historical version (dt.load_as_version)
+    if version is not None:
+        dt.load_as_version(version)
     return pl.from_arrow(dt.to_pyarrow_table())
 
 
@@ -43,7 +54,7 @@ def append_with_evolution(path: Path, df: pl.DataFrame) -> None:
     A plain append would reject a mismatched schema. Delta can evolve the schema on write so old
     rows get NULL for the new column and new rows carry it – all as one atomic, versioned commit.
     """
-    # TODO(4): append df with schema evolution enabled (mode="append", schema_mode="merge")
+    write_deltalake(str(path), df.to_arrow(), mode="append", schema_mode="merge")
 
 
 def table_history_len(path: Path) -> int:
