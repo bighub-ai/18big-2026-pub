@@ -19,7 +19,7 @@ class Customers(pa.DataFrameModel):
 
 class Payments(pa.DataFrameModel):
     order_id: int = pa.Field(ge=0)
-    # TODO(5): a payment amount must be strictly positive (use a Field constraint)
+    amount: float = pa.Field(gt=0)
     method: str = pa.Field(isin=["CARD", "TRANSFER", "CASH"])
 
 

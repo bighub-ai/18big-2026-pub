@@ -1,0 +1,9 @@
+# dbt-duckdb profile. The DuckDB file is prepared by `eshop dbt-build`, which loads the Silver
+# Delta tables into it (schema `silver`) and passes its absolute path via ESHOP_DUCKDB.
+eshop:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('ESHOP_DUCKDB', 'eshop.duckdb') }}"
+      threads: 4

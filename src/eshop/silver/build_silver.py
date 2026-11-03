@@ -30,7 +30,7 @@ def build_silver() -> dict:
     # --- customers: dedup, then route rows with a malformed email to quarantine ---
     customers = _bronze("customers").unique(subset=["customer_id"], keep="first")
     # A valid customer must have a plausible email address (contains '@').
-    # TODO(5): build the boolean expression that marks valid customers (email has '@')
+    email_ok = pl.col("email").str.contains("@")
     good = customers.filter(email_ok)
     bad = customers.filter(~email_ok)
     Customers.validate(good, lazy=True)  # contract gate – must pass
@@ -41,7 +41,7 @@ def build_silver() -> dict:
     # --- payments: dedup exact duplicates, quarantine non-positive amounts ---
     payments = _bronze("payments").unique(subset=["order_id", "amount", "method"], keep="first")
     # A valid payment must have a strictly positive amount (a refund/typo is not revenue here).
-    # TODO(5): build the boolean expression that marks valid payments (amount > 0)
+    amount_ok = pl.col("amount") > 0
     good_p = payments.filter(amount_ok)
     bad_p = payments.filter(~amount_ok)
     Payments.validate(good_p, lazy=True)
@@ -54,7 +54,8 @@ def build_silver() -> dict:
     # Harder: an order that points to a customer we quarantined is a broken reference. Keep only
     # orders whose customer_id exists among the *valid* customers; quarantine the rest.
     known_customers = good["customer_id"].to_list()
-    # TODO(5): split orders into valid (customer_id in known_customers) and quarantine
+    orders_ok = orders.filter(pl.col("customer_id").is_in(known_customers))
+    orders_bad = orders.filter(~pl.col("customer_id").is_in(known_customers))
     Orders.validate(orders_ok, lazy=True)
     write_delta(settings.silver_dir / "orders", orders_ok)
     _quarantine("orders", orders_bad)

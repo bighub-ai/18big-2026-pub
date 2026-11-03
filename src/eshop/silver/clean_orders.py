@@ -12,8 +12,12 @@ import polars as pl
 
 def clean_orders(df: pl.DataFrame) -> pl.DataFrame:
     """Cast columns, drop incomplete and duplicate orders."""
-    # TODO(5): cast order_id/customer_id to Int64, order_ts to Datetime
+    df = df.with_columns(
+        pl.col("order_id").cast(pl.Int64),
+        pl.col("customer_id").cast(pl.Int64),
+        pl.col("order_ts").str.to_datetime(strict=False),
+    )
 
-    # TODO(5): drop rows with NULL order_id and deduplicate by order_id
+    df = df.drop_nulls(subset=["order_id"]).unique(subset=["order_id"], keep="first")
 
     return df
