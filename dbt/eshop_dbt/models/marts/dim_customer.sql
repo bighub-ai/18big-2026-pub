@@ -7,6 +7,6 @@ select
     coalesce(ico.order_count, 0) as order_count,
     coalesce(ico.revenue, 0)     as revenue,
     -- Harder: rank customers by revenue (highest revenue = rank 1) using a window function.
-    -- TODO(6): add revenue_rank = rank() over (order by revenue desc)
+    rank() over (order by coalesce(ico.revenue, 0) desc) as revenue_rank
 from {{ ref('stg_customers') }} c
 left join {{ ref('int_customer_orders') }} ico using (customer_id)

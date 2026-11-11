@@ -6,4 +6,13 @@ items as (
     select * from {{ ref('stg_order_items') }}
 )
 
--- TODO(6): one row per order with order_amount (sum line_amount) and n_items (count)
+select
+    orders.order_id,
+    orders.customer_id,
+    orders.order_ts,
+    orders.status,
+    sum(items.line_amount) as order_amount,
+    count(*)               as n_items
+from orders
+join items using (order_id)
+group by orders.order_id, orders.customer_id, orders.order_ts, orders.status

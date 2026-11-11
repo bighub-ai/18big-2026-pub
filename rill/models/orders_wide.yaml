@@ -1,0 +1,16 @@
+# A "derived model": Rill's metrics views sit on ONE table, so the star schema
+# (star_fct_orders + star_dim_customer) is flattened here – the join happens before the dashboard.
+# Power BI would instead keep both tables and a relationship on customer_id.
+type: model
+sql: |
+  SELECT
+      f.order_id,
+      f.order_ts,
+      f.order_date,
+      f.status,
+      f.order_amount,
+      f.n_items,
+      f.customer_id,
+      c.city
+  FROM {{ ref "star_fct_orders" }} AS f
+  LEFT JOIN {{ ref "star_dim_customer" }} AS c USING (customer_id)

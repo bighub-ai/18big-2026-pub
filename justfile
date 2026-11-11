@@ -34,3 +34,11 @@ bronze ENTITY="orders":
 # [S02] simulate new business: append N orders to the SQLite source, then `just ingest`
 new-orders N="10":
     uv run eshop new-orders {{N}}
+
+# [S07] the interactive Streamlit dashboard over Gold (run `uv run eshop dbt-build` first)
+dashboard:
+    uv run streamlit run app/dashboard.py
+
+# [S07] optional: the same Gold as a model-driven Rill dashboard (install: see rill/rill.yaml)
+rill:
+    rill start rill

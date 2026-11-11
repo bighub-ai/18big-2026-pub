@@ -1,0 +1,43 @@
+# Orders by customer city and status – over the flattened star (models/orders_wide.yaml).
+version: 1
+type: metrics_view
+
+display_name: E-shop orders
+description: Orders, revenue and average order value by customer city and order status.
+
+model: orders_wide
+timeseries: order_ts
+smallest_time_grain: day
+
+dimensions:
+  - name: city
+    display_name: Customer city
+    column: city
+  - name: status
+    display_name: Order status
+    column: status
+
+measures:
+  - name: orders
+    display_name: Orders
+    expression: COUNT(*)
+    format_preset: humanize
+  - name: revenue
+    display_name: Revenue
+    expression: SUM(order_amount)
+    format_d3: ",.0f"
+  - name: avg_order_value
+    display_name: Avg order value
+    expression: SUM(order_amount) / NULLIF(COUNT(*), 0)
+    format_d3: ",.2f"
+    valid_percent_of_total: false
+  - name: customers
+    display_name: Customers
+    expression: COUNT(DISTINCT customer_id)
+    format_preset: humanize
+    valid_percent_of_total: false
+
+explore:
+  display_name: E-shop orders
+  defaults:
+    measures: [orders, revenue, avg_order_value]

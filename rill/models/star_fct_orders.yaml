@@ -1,0 +1,3 @@
+# Gold star schema – fact table (one row per order), read as-is from the lake.
+type: model
+sql: SELECT * FROM read_parquet('../data/lake/gold/star_fct_orders.parquet')

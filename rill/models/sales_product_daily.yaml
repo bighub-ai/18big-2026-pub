@@ -1,0 +1,3 @@
+# The Gold data product, read as-is from the lake (Parquet). Grain: one row per (day, product).
+type: model
+sql: SELECT * FROM read_parquet('../data/lake/gold/sales_product_daily.parquet')

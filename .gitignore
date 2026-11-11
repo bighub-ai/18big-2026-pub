@@ -21,6 +21,8 @@ dbt/eshop_dbt/.user.yml
 mlruns/
 mlartifacts/
 mlflow.db
+rill/tmp/
+rill/.env
 
 # OS / IDE
 .DS_Store

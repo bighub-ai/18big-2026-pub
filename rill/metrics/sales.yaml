@@ -1,0 +1,46 @@
+# The semantic model: which columns are dimensions, which aggregations are measures.
+# Rill derives the whole interactive dashboard from this file – filters, cross-filtering,
+# leaderboards, time comparison. Compare with app/dashboard.py, where we wrote that by hand.
+version: 1
+type: metrics_view
+
+display_name: E-shop sales
+description: Revenue and units by day, product category and product (Gold sales_product_daily).
+
+model: sales_product_daily
+timeseries: day
+smallest_time_grain: day
+
+dimensions:
+  - name: category
+    display_name: Category
+    column: category
+  - name: product_name
+    display_name: Product
+    column: product_name
+
+measures:
+  - name: revenue
+    display_name: Revenue
+    expression: SUM(revenue)
+    format_d3: ",.0f"
+    description: Sum of order-line amounts (qty × unit price)
+  - name: units
+    display_name: Units sold
+    expression: SUM(units)
+    format_preset: humanize
+  - name: revenue_per_unit
+    display_name: Revenue per unit
+    expression: SUM(revenue) / NULLIF(SUM(units), 0)
+    format_d3: ",.2f"
+    valid_percent_of_total: false
+  - name: active_products
+    display_name: Products sold
+    expression: COUNT(DISTINCT product_name)
+    format_preset: humanize
+    valid_percent_of_total: false
+
+explore:
+  display_name: E-shop sales
+  defaults:
+    measures: [revenue, units]

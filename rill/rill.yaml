@@ -1,0 +1,11 @@
+compiler: rillv1
+
+display_name: E-shop Lakehouse (Gold)
+
+# Session 7 – OPTIONAL: model-driven BI over the Gold data products (an alternative to the
+# hand-written Streamlit dashboard). Rill is a single binary, not a Python package:
+#   macOS:        brew tap rilldata/tap && brew install rilldata/tap/rill
+#   macOS/Linux:  curl https://rill.sh | sh      (Windows: use WSL)
+# Then, from the repo root (Gold must exist – run `uv run eshop dbt-build` first):
+#   rill start rill        → http://localhost:9009
+olap_connector: duckdb
