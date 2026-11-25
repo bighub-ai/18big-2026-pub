@@ -8,5 +8,5 @@ select
     revenue,
     revenue_rank,
     -- A simple business segmentation for consumers of this data product.
-    -- TODO(7): 'active' when revenue > 0, otherwise 'prospect'
+    case when revenue > 0 then 'active' else 'prospect' end as segment
 from {{ ref('dim_customer') }}

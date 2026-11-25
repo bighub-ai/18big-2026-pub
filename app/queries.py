@@ -75,11 +75,21 @@ def top_products(
     """Top N products by revenue within the active filters (category and/or time window)."""
     where, params = _where(category, start, end)
     # Gold has one row per (day, product): sum it up per product, then keep the best n.
-    # TODO(7): from sales_product_daily, apply `where`, sum revenue per product_name, top n desc
+    return _query(
+        f"SELECT product_name, sum(revenue) AS revenue "
+        f"FROM read_parquet('{_gold('sales_product_daily')}') {where} "
+        f"GROUP BY product_name ORDER BY revenue DESC LIMIT {int(n)}",
+        params,
+    )
 
 
 def revenue_by_category(start: date | None = None, end: date | None = None) -> pl.DataFrame:
     """Total revenue per product category within the time window."""
     where, params = _where(start=start, end=end)
     # Same product, coarser view: roll (day, product) rows up to category level.
-    # TODO(7): from sales_product_daily, apply `where`, sum revenue per category, highest first
+    return _query(
+        f"SELECT category, sum(revenue) AS revenue "
+        f"FROM read_parquet('{_gold('sales_product_daily')}') {where} "
+        f"GROUP BY category ORDER BY revenue DESC",
+        params,
+    )

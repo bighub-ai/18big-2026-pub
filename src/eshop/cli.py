@@ -110,10 +110,10 @@ def pipeline() -> None:
 
     if str(REPO_ROOT) not in sys.path:
         sys.path.insert(0, str(REPO_ROOT))
-    from dagster_project.definitions import all_assets
+    from dagster_project.definitions import all_assets, all_checks, resources
 
-    console.print("[bold]Materializing all Dagster assets[/] (raw → bronze → silver → marts)")
-    result = materialize(all_assets)
+    console.print("[bold]Materializing all Dagster assets[/] (raw → bronze → silver → dbt → serving)")
+    result = materialize([*all_assets, *all_checks], resources=resources)
     status = "[green]SUCCESS[/]" if result.success else "[red]FAILED[/]"
     console.print(f"Pipeline: {status}")
     console.print("Tip: [bold]uv run dagster dev -m dagster_project.definitions[/] for the UI.")

@@ -1,0 +1,23 @@
+# Data contract for the customers entity (session 8).
+# A lightweight, human-readable governance artifact: schema, ownership, sensitivity, PII.
+name: customers
+owner: sales
+classification: internal
+description: Customer master data
+sla: daily
+columns:
+  customer_id:
+    type: integer
+    nullable: false
+    pii: false
+  name:
+    type: string
+    pii: true
+  email:
+    type: string
+    pii: true
+    classification: pii
+  city:
+    type: string
+  signup_date:
+    type: string
